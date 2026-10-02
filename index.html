@@ -1,0 +1,79 @@
+Bilans bus
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bilans Przejazdu - WST</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #121212; color: white; padding: 20px; }
+    .box { max-width: 400px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 12px; }
+    h1 { font-size: 48px; margin: 10px 0; }
+    .plus { color: #4caf50; }
+    .minus { color: #f44336; }
+    input { width: 80%; padding: 10px; font-size: 18px; margin-bottom: 15px; text-align: center; border-radius: 6px; border: none; }
+    button { display: block; width: 100%; padding: 15px; margin: 10px 0; font-size: 18px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; }
+    .btn-5 { background: #2196f3; color: white; }
+    .btn-m { background: #ff9800; color: white; }
+    .btn-0 { background: #9e9e9e; color: white; }
+    .btn-reset { background: #333; color: #ff5555; margin-top: 20px; }
+    .stats { margin-top: 15px; color: #aaa; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h3>Koszt początkowy kursu (zł):</h3>
+  <input type="number" id="cost" value="300" onchange="updateCost()">
+
+  <h2>Bilans kursu:</h2>
+  <h1 id="balance" class="minus">-300 zł</h1>
+
+  <button class="btn-5" onclick="addTicket(5)">+ Normalny (5 zł)</button>
+  <button class="btn-m" onclick="addTicket(1.5)">+ Miesięczny / Metropolitalny (~1.50 zł)</button>
+  <button class="btn-0" onclick="addTicket(0)">+ Darmowy (0 zł)</button>
+
+  <div class="stats">
+    Pasażerów: <span id="count">0</span>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">Resetuj kurs</button>
+</div>
+
+<script>
+  let initialCost = 300;
+  let revenue = 0;
+  let passengers = 0;
+
+  function updateCost() {
+    initialCost = parseFloat(document.getElementById('cost').value) || 0;
+    render();
+  }
+
+  function addTicket(price) {
+    revenue += price;
+    passengers++;
+    render();
+  }
+
+  function render() {
+    let balance = revenue - initialCost;
+    let balanceEl = document.getElementById('balance');
+    
+    balanceEl.textContent = (balance >= 0 ? "+" : "") + balance.toFixed(2) + " zł";
+    balanceEl.className = balance >= 0 ? "plus" : "minus";
+    
+    document.getElementById('count').textContent = passengers;
+  }
+
+  function resetAll() {
+    revenue = 0;
+    passengers = 0;
+    render();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
